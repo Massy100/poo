@@ -1,0 +1,21 @@
+meta {
+  name: Crear usuario
+  type: http
+  seq: 1
+}
+
+post {
+  url: http://172.29.76.255:3000/api
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "email": "correo@gmail.com"
+  }
+}
+
+settings {
+  encodeUrl: true
+}
