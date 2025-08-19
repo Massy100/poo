@@ -6,6 +6,7 @@ import PostRegister from '@/utils/post-register';
 import PostFinder from "@/utils/post-finder";
 import PostUpdater from "@/utils/post-updater";
 import PostRepository from '@/utils/post-repository';
+import PostDeleter from "@/utils/post-deleter";
 
 // export async function POST(request: NextRequest) {
 //     try {
@@ -52,7 +53,6 @@ export async function POST(request: NextRequest) {
         const repository = new PostgresPostRepository();
         const register = new PostRegister(repository);
         
-        // Usa execute() en lugar de run() - verifica el nombre del método
         await register.run(data.title, data.description, data.author);
 
         return NextResponse.json({
@@ -87,6 +87,21 @@ export async function PUT(
         console.error('Error updating post:', error);
         return NextResponse.json({ 
             error: error instanceof Error ? error.message : 'Failed to update post'
+        }, { status: 400 });
+    }
+}
+// DELETE - Eliminar un post existente
+export async function DELETE(request: NextRequest, { params }: { params: { id: string } }) {
+    try {
+        const repository = new PostgresPostRepository();
+        const deleter = new PostDeleter(repository);
+        
+        await deleter.execute(params.id);
+        return NextResponse.json({ success: true });
+    } catch (error) {
+        console.error('Error deleting post:', error);
+        return NextResponse.json({ 
+            error: error instanceof Error ? error.message : 'Failed to delete post'
         }, { status: 400 });
     }
 }
