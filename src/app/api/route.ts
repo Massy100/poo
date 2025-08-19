@@ -30,13 +30,13 @@ export async function POST(request: NextRequest) {
     try {
         const data = await request.json();
         const repository = new PostgresPostRepository();
-        await repository.save(data.title, data.description, data.author);
+        //await repository.save(data.title, data.description, data.author);
 
         return NextResponse.json({
             message: 'Post saved successfully',
         });
     } catch (error) {
-        
+
         console.error('Error validating post:', error);
         return NextResponse.json({
             error: error instanceof Error ? error.message : 'Failed to validate post',

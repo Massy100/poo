@@ -1,5 +1,6 @@
 import { Sql } from 'postgres';
 import postgres from 'postgres';
+import Post from './post';
 
 export default class PostgresPostRepository {
     private readonly sql: Sql;
@@ -9,10 +10,10 @@ export default class PostgresPostRepository {
         this.sql = postgres(connectionString);
     }
 
-    async save(title: string, description: string, author: string): Promise<void> {
+    async save(post: Post): Promise<void> {
         try {
             await this
-            .sql`INSERT INTO posts (title, description, author) VALUES (${title}, ${description}, ${author});`;
+            .sql`INSERT INTO posts (title, description, author) VALUES (${post.title}, ${post.description}, ${post.author});`;
         } catch {
             throw new Error('Failed to save post to database');
         }
