@@ -12,10 +12,22 @@ export default class PostgresPostRepository {
 
     async save(post: Post): Promise<void> {
         try {
-            await this
-            .sql`INSERT INTO posts (title, description, author) VALUES (${post.title}, ${post.description}, ${post.author});`;
+            await this.sql`
+                INSERT INTO posts (title, description, author) 
+                VALUES (${String(post.title)}, ${String(post.description)}, ${String(post.author)});
+            `;
         } catch {
             throw new Error('Failed to save post to database');
         }
+    }
+    
+    async findAll(): Promise<Post[]> {
+        const posts = await this.sql`
+            SELECT * FROM posts ORDER BY created_at DESC
+        `;
+        
+        return posts.map(row => 
+            Post.create(row.title, row.description, row.author)
+        );
     }
 }
