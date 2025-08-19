@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import UserRegister from '@/utils/user-register';
 import PostgresUserRepository from '@/utils/postgres-user-repository';
 import PostgresPostRepository from '@/utils/postgres-post-repository';
-
+import PostRegister from '@/utils/post-register';
 
 // export async function POST(request: NextRequest) {
 //     try {
@@ -30,7 +30,8 @@ export async function POST(request: NextRequest) {
     try {
         const data = await request.json();
         const repository = new PostgresPostRepository();
-        //await repository.save(data.title, data.description, data.author);
+        const register = new PostRegister(repository);
+        await register.run(data.title, data.description, data.author);
 
         return NextResponse.json({
             message: 'Post saved successfully',
